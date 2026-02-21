@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Search Student Results</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1e3a8a, #38bdf8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    main {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card {
+      width: 420px;
+      padding: 30px;
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(12px);
+      border-radius: 18px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+      animation: slideUp 0.9s ease;
+      text-align: center;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .card h3 {
+      color: #ffffff;
+      margin-bottom: 25px;
+      font-size: 24px;
+      letter-spacing: 1px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      outline: none;
+      font-size: 15px;
+      margin-bottom: 20px;
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    input::placeholder {
+      color: #64748b;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #2563eb, #38bdf8);
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        width: 90%;
+        padding: 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main>
+    <div class="card">
+      <h3>Search Student Results</h3>
+
+      <input type="text" placeholder="Enter Registration Number">
+      <button>Search</button>
+    </div>
+  </main>
+
+</body>
+</html>
