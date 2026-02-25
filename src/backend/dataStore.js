@@ -1,9 +1,14 @@
 // In-memory data store for student results
-// In production, this would be replaced with a database
+// For persistence, results are also saved to a JSON file on disk.
+
+const fs = require('fs');
+const path = require('path');
+
+const DATA_FILE = path.join(__dirname, 'results.json');
 
 let results = [];
 
-// Initialize with sample data
+// Initialize with sample data (used when no file exists or file is invalid)
 function initializeSampleData() {
   results = [
     {
@@ -33,12 +38,40 @@ function initializeSampleData() {
   ];
 }
 
-// Initialize sample data on module load
-initializeSampleData();
+function saveResultsToFile() {
+  try {
+    fs.writeFileSync(DATA_FILE, JSON.stringify(results, null, 2), 'utf8');
+  } catch (err) {
+    console.error('Failed to save results to file:', err.message);
+  }
+}
+
+function loadResultsFromFile() {
+  try {
+    if (fs.existsSync(DATA_FILE)) {
+      const raw = fs.readFileSync(DATA_FILE, 'utf8');
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        results = parsed;
+        return;
+      }
+    }
+  } catch (err) {
+    console.error('Failed to load results from file, using sample data:', err.message);
+  }
+
+  // Fallback to sample data if file is missing or invalid
+  initializeSampleData();
+  saveResultsToFile();
+}
+
+// Load results (from file if available, otherwise sample data)
+loadResultsFromFile();
 
 // Add a new result
 function addResult(result) {
   results.push(result);
+  saveResultsToFile();
   return result;
 }
 
@@ -64,6 +97,7 @@ function deleteResult(id) {
   const index = results.findIndex(result => result.id === id);
   if (index !== -1) {
     results.splice(index, 1);
+    saveResultsToFile();
     return true;
   }
   return false;
@@ -74,6 +108,7 @@ function updateResult(id, updatedData) {
   const index = results.findIndex(result => result.id === id);
   if (index !== -1) {
     results[index] = { ...results[index], ...updatedData };
+    saveResultsToFile();
     return results[index];
   }
   return null;
@@ -82,6 +117,7 @@ function updateResult(id, updatedData) {
 // Clear all results (useful for testing)
 function clearAllResults() {
   results = [];
+  saveResultsToFile();
 }
 
 module.exports = {

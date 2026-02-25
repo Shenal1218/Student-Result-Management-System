@@ -127,7 +127,7 @@
 <body>
 
   <div class="card">
-    <h3> Student Results</h3>
+    <h3>Student Results</h3>
 
     <table>
       <thead>
@@ -139,30 +139,50 @@
         </tr>
       </thead>
 
-      <tbody>
-        <tr>
-          <td>2025IT01</td>
-          <td>Mathematics</td>
-          <td>85</td>
-          <td><span class="grade a">A+</span></td>
-        </tr>
-
-        <tr>
-          <td>2025IT02</td>
-          <td>Science</td>
-          <td>72</td>
-          <td><span class="grade b">B</span></td>
-        </tr>
-
-        <tr>
-          <td>2025IT03</td>
-          <td>ICT</td>
-          <td>61</td>
-          <td><span class="grade c">C</span></td>
-        </tr>
+      <tbody id="resultsBody">
       </tbody>
     </table>
   </div>
+
+<script>
+  function getGradeClass(grade) {
+    if (grade === "A+" || grade === "A") return "a";
+    if (grade === "B") return "b";
+    return "c";
+  }
+
+  async function loadResults() {
+    const tbody = document.getElementById("resultsBody");
+    tbody.innerHTML = "<tr><td colspan='4'>Loading...</td></tr>";
+
+    try {
+      const res = await fetch("/api/results");
+      const data = await res.json();
+      const results = data.results || data;
+
+      if (!results || results.length === 0) {
+        tbody.innerHTML = "<tr><td colspan='4'>No results found.</td></tr>";
+        return;
+      }
+
+      tbody.innerHTML = "";
+      results.forEach(r => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${r.regno}</td>
+          <td>${r.subject}</td>
+          <td>${r.marks}</td>
+          <td><span class="grade ${getGradeClass(r.grade)}">${r.grade}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    } catch (err) {
+      tbody.innerHTML = "<tr><td colspan='4'>Failed to load results.</td></tr>";
+    }
+  }
+
+  window.addEventListener("load", loadResults);
+</script>
 
 </body>
 </html>

@@ -127,17 +127,44 @@
   </main>
 
   <script>
-    function addResult() {
-      const reg = document.getElementById("regno").value;
-      const subject = document.getElementById("subject").value;
-      const marks = document.getElementById("marks").value;
+    async function addResult() {
+      const regno = document.getElementById("regno").value.trim();
+      const subject = document.getElementById("subject").value.trim();
+      const marks = document.getElementById("marks").value.trim();
 
-      if (reg === "" || subject === "" || marks === "") {
+      if (!regno || !subject || !marks) {
         alert("Please fill all fields!");
         return;
       }
 
-      alert("Result added successfully ✔");
+      const marksNum = Number(marks);
+      if (isNaN(marksNum) || marksNum < 0 || marksNum > 100) {
+        alert("Marks must be a number between 0 and 100");
+        return;
+      }
+
+      try {
+        const response = await fetch("/api/results", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ regno, subject, marks: marksNum })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "Failed to add result");
+        }
+
+        alert("Result added successfully ✔");
+        document.getElementById("regno").value = "";
+        document.getElementById("subject").value = "";
+        document.getElementById("marks").value = "";
+      } catch (err) {
+        alert("Error adding result: " + err.message);
+      }
     }
   </script>
 

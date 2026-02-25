@@ -107,10 +107,53 @@
     <div class="card">
       <h3>Search Student Results</h3>
 
-      <input type="text" placeholder="Enter Registration Number">
-      <button>Search</button>
+      <input type="text" id="regno" placeholder="Enter Registration Number">
+      <button onclick="searchResults()">Search</button>
+
+      <div id="results" style="margin-top:20px; color:#fff;"></div>
     </div>
   </main>
+
+<script>
+  async function searchResults() {
+    const regno = document.getElementById("regno").value.trim();
+    const container = document.getElementById("results");
+
+    if (!regno) {
+      alert("Please enter a registration number");
+      return;
+    }
+
+    container.innerHTML = "Searching...";
+
+    try {
+      const res = await fetch(`/api/results/${encodeURIComponent(regno)}`);
+      const data = await res.json();
+
+      if (!res.ok) {
+        container.innerHTML = data.error || "No results found";
+        return;
+      }
+
+      const results = data.results || data;
+      if (!results || results.length === 0) {
+        container.innerHTML = "No results found.";
+        return;
+      }
+
+      let html = "<table style='width:100%;border-collapse:collapse;background:#fff;color:#0f172a;border-radius:8px;overflow:hidden;'>";
+      html += "<tr style='background:#e0e7ff;color:#1e3a8a;'><th style='padding:8px;'>Subject</th><th style='padding:8px;'>Marks</th><th style='padding:8px;'>Grade</th></tr>";
+      results.forEach(r => {
+        html += `<tr><td style='padding:8px;text-align:center;'>${r.subject}</td><td style='padding:8px;text-align:center;'>${r.marks}</td><td style='padding:8px;text-align:center;'>${r.grade}</td></tr>`;
+      });
+      html += "</table>";
+
+      container.innerHTML = html;
+    } catch (err) {
+      container.innerHTML = "Failed to search results.";
+    }
+  }
+</script>
 
 </body>
 </html>

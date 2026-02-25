@@ -159,23 +159,23 @@
 
     <div class="dashboard">
       <div class="card">
-        <h4>📊 Current GPA</h4>
-        <p>3.65</p>
+        <h4>📊 Average GPA</h4>
+        <p id="avgGpa">-</p>
       </div>
 
       <div class="card">
         <h4>📚 Total Subjects</h4>
-        <p>8</p>
+        <p id="totalSubjects">-</p>
       </div>
 
       <div class="card">
         <h4>🏆 Best Grade</h4>
-        <p>A+</p>
+        <p id="bestGrade">-</p>
       </div>
 
       <div class="card">
-        <h4>👨‍🎓 Student ID</h4>
-        <p>2025IT01</p>
+        <h4>👨‍🎓 Total Students</h4>
+        <p id="totalStudents">-</p>
       </div>
     </div>
 
@@ -183,6 +183,28 @@
       Measure. Improve. Achieve.
     </footer>
   </main>
+
+<script>
+  async function loadDashboard() {
+    try {
+      const res = await fetch("/api/dashboard");
+      const data = await res.json();
+
+      document.getElementById("avgGpa").textContent =
+        data.averageGPA !== undefined ? data.averageGPA.toFixed(2) : "-";
+      document.getElementById("totalSubjects").textContent =
+        data.totalSubjects !== undefined ? data.totalSubjects : "-";
+      document.getElementById("bestGrade").textContent =
+        data.bestGrade || "-";
+      document.getElementById("totalStudents").textContent =
+        data.totalStudents !== undefined ? data.totalStudents : "-";
+    } catch (err) {
+      console.error("Failed to load dashboard", err);
+    }
+  }
+
+  window.addEventListener("load", loadDashboard);
+</script>
 
 </body>
 </html>

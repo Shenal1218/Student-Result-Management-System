@@ -1,8 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const path = require('path');
 const dataStore = require('./dataStore');
-const { calculateGPA, getGrade } = require('./utils');
+const { calculateGPA, getGrade, getGradePoint } = require('./utils');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -11,6 +12,15 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Serve static frontend files
+const publicDir = path.join(__dirname, '../frontend');
+app.use(express.static(publicDir));
+
+// Root route -> dashboard
+app.get('/', (req, res) => {
+  res.sendFile(path.join(publicDir, 'index.html'));
+});
 
 // Routes
 
@@ -178,16 +188,6 @@ app.delete('/api/results/:id', (req, res) => {
     res.status(500).json({ error: 'Internal server error', details: error.message });
   }
 });
-
-// Helper function to get grade point
-function getGradePoint(marks) {
-  if (marks >= 85) return 4.0;
-  else if (marks >= 75) return 3.7;
-  else if (marks >= 65) return 3.0;
-  else if (marks >= 55) return 2.0;
-  else if (marks >= 40) return 1.0;
-  else return 0.0;
-}
 
 // Helper function to get best grade
 function getBestGrade(grades) {
