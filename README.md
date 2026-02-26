@@ -16,7 +16,7 @@ The Student Result Management System is a web-based application designed to mana
 The system allows administrators to add, update, and manage student marks, while students can securely view their results. This project demonstrates practical implementation of full-stack development combined with Git version control and DevOps CI/CD practices.
 
  Live Deployment
-🔗 **Live URL:** *(Add your deployed application link here — e.g., Render / Vercel / Railway)*
+🔗 **Live URL: https://student-result-management-systems.vercel.app/
 
 Technologies Used
 
