@@ -1,0 +1,13 @@
+{
+  "github": {
+    "enabled": false
+  },
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/api" }
+  ],
+  "functions": {
+    "api/index.js": {
+      "includeFiles": "src/backend/results.json"
+    }
+  }
+}
