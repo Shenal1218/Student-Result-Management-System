@@ -1,0 +1,42 @@
+[
+  {
+    "id": "1",
+    "regno": "2025IT01",
+    "subject": "Mathematics",
+    "marks": 75,
+    "grade": "A",
+    "createdAt": "2026-02-26T07:44:40.463Z"
+  },
+  {
+    "id": "2",
+    "regno": "2025IT02",
+    "subject": "Science",
+    "marks": 65,
+    "grade": "B",
+    "createdAt": "2026-02-26T07:44:40.469Z"
+  },
+  {
+    "id": "3",
+    "regno": "2025IT03",
+    "subject": "ICT",
+    "marks": 55,
+    "grade": "C",
+    "createdAt": "2026-02-26T07:44:40.469Z"
+  },
+  {
+    "id": "4",
+    "regno": "2025IT02",
+    "subject": "Science",
+    "marks": 40,
+    "grade": "C-",
+    "createdAt": "2026-02-26T07:44:40.469Z"
+  },
+  {
+    "id": "5",
+    "regno": "2025IT03",
+    "subject": "ICT",
+    "marks": 1,
+    "grade": "F",
+    "createdAt": "2026-02-26T07:44:40.469Z"
+  }
+]

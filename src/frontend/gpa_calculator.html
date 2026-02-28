@@ -123,8 +123,12 @@
   <h2>Student GPA Calculator</h2>
 
   <div class="grid">
-    
-   
+    <div>
+      <label for="regno">Registration Number</label>
+      <input type="text" id="regno" placeholder="Enter registration number">
+      <button onclick="loadGpa()">Load GPA</button>
+      <p id="status" style="margin-top:12px;color:#e5e7eb;font-size:14px;"></p>
+    </div>
 
     <div>
       <table>
@@ -147,64 +151,56 @@
 </div>
 
 <script>
-  let results = [];
+  async function loadGpa() {
+    const regnoInput = document.getElementById("regno");
+    const statusEl = document.getElementById("status");
+    const tableBody = document.getElementById("resultTable");
+    const gpaEl = document.getElementById("gpa");
 
-  function getGradePoint(marks) {
-    if (marks >= 85) return { grade: "A+", point: 4.0 };
-    else if (marks >= 75) return { grade: "A", point: 3.7 };
-    else if (marks >= 65) return { grade: "B", point: 3.0 };
-    else if (marks >= 55) return { grade: "C", point: 2.0 };
-    else if (marks >= 40) return { grade: "D", point: 1.0 };
-    else return { grade: "F", point: 0.0 };
-  }
-
-  function addResult() {
-    let subject = document.getElementById("subject").value;
-    let marks = parseInt(document.getElementById("marks").value);
-
-    if (subject === "" || isNaN(marks)) {
-      alert("Please fill all fields");
+    const regno = regnoInput.value.trim();
+    if (!regno) {
+      alert("Please enter a registration number");
       return;
     }
 
-    let gradeData = getGradePoint(marks);
+    statusEl.textContent = "Loading GPA...";
+    tableBody.innerHTML = "";
+    gpaEl.innerText = "0.00";
 
-    results.push({
-      subject: subject,
-      marks: marks,
-      grade: gradeData.grade,
-      point: gradeData.point
-    });
+    try {
+      const res = await fetch(`/api/gpa/${encodeURIComponent(regno)}`);
+      const data = await res.json();
 
-    updateTable();
-    calculateGPA();
+      if (!res.ok) {
+        statusEl.textContent = data.error || "No results found for this registration number.";
+        return;
+      }
 
-    document.getElementById("subject").value = "";
-    document.getElementById("marks").value = "";
-  }
+      const gradePoints = data.gradePoints || [];
 
-  function updateTable() {
-    let table = document.getElementById("resultTable");
-    table.innerHTML = "";
+      if (!gradePoints.length) {
+        statusEl.textContent = "No subjects found for this student.";
+        return;
+      }
 
-    results.forEach(r => {
-      table.innerHTML += `
-        <tr>
+      gradePoints.forEach(r => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
           <td>${r.subject}</td>
           <td>${r.marks}</td>
           <td>${r.grade}</td>
           <td>${r.point}</td>
-        </tr>
-      `;
-    });
-  }
+        `;
+        tableBody.appendChild(row);
+      });
 
-  function calculateGPA() {
-    let total = 0;
-    results.forEach(r => total += r.point);
-
-    let gpa = total / results.length;
-    document.getElementById("gpa").innerText = gpa.toFixed(2);
+      const gpaValue = Number(data.gpa);
+      gpaEl.innerText = isNaN(gpaValue) ? "0.00" : gpaValue.toFixed(2);
+      statusEl.textContent = `GPA loaded for ${data.regno}`;
+    } catch (err) {
+      console.error("Failed to load GPA", err);
+      statusEl.textContent = "Failed to load GPA. Please try again.";
+    }
   }
 </script>
 

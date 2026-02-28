@@ -1,0 +1,26 @@
+services:
+  app:
+    build:
+      context: .
+      target: prod
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+    volumes:
+      - ./src/backend/results.json:/app/src/backend/results.json
+    restart: unless-stopped
+
+  app-dev:
+    profiles: ["dev"]
+    build:
+      context: .
+      target: dev
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    command: npm run dev

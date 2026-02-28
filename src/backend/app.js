@@ -203,3 +203,5 @@ app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
   console.log(`API endpoints available at http://localhost:${PORT}/api`);
 });
+
+module.exports = app;
