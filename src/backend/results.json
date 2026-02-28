@@ -38,5 +38,13 @@
     "marks": 1,
     "grade": "F",
     "createdAt": "2026-02-26T07:44:40.469Z"
+  },
+  {
+    "id": "1772287478116",
+    "regno": "ITBIN-2313-00037",
+    "subject": "SEMINAR",
+    "marks": 67,
+    "grade": "B",
+    "createdAt": "2026-02-28T14:04:38.116Z"
   }
 ]
